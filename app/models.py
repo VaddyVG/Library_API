@@ -32,7 +32,7 @@ class Reservation(Base):
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey("books.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
-    reserved_at = Column(DateTime, default=datetime.utcnow)
+    reserved_at = Column(DateTime, default=datetime.now)
     expires_at = Column(DateTime)
     is_returned = Column(Boolean, default=False)
 
