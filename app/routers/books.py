@@ -55,5 +55,5 @@ async def book_by_author(book_author: str,
     book = await get_books_by_author(db, book_author)
     if not book:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Книги автора '{book_author}' не найдена")
+                            detail=f"Книги автора '{book_author}' не найдены")
     return book

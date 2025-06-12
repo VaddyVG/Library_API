@@ -31,6 +31,6 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(books.router)
 app.include_router(reservations.router)
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def root():
     return {"message": "Library API"}
