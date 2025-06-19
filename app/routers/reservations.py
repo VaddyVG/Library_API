@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import ReservationCreate, Reservation as ReservationSchema
 from app.databases.database import get_db
-from app.services import reservations_services as reservation_crud
+import app.services.reservations_services as reservation_crud
 
 
 router = APIRouter(prefix="/reservations", tags=['Reservations'])

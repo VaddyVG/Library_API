@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import Book, BookCreate
-from app.services.book_services import get_book, get_books_by_author, create_book
 from app.databases.database import get_db
+import app.services.book_services as book_crud
 
 
 router = APIRouter(prefix="/books", tags=["Books"])
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/books", tags=["Books"])
             summary="Получить все книги",
             description="Список всех книг в библиотеке")
 async def list_books(db: AsyncSession = Depends(get_db)):
-    return await get_books_by_author(db, "")
+    return await book_crud.get_books_by_author(db, "")
 
 
 @router.post("/create_book", 
@@ -25,7 +25,7 @@ async def create_new_book(
     db: AsyncSession = Depends(get_db)
 ):
     """Создание новой книги"""
-    return await create_book(db, book)
+    return await book_crud.create_book(db, book)
 
 
 @router.get("/{book_id}", 
@@ -36,7 +36,7 @@ async def create_new_book(
                 404: {"description": "Книга не найдена"}
             })
 async def read_book(book_id: int, db: AsyncSession = Depends(get_db)):
-    book = await get_book(db, book_id)
+    book = await book_crud.get_book(db, book_id)
     if not book:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                             detail="Книга не найдена")
@@ -52,8 +52,15 @@ async def read_book(book_id: int, db: AsyncSession = Depends(get_db)):
             })
 async def book_by_author(book_author: str,
                              db: AsyncSession = Depends(get_db)):
-    book = await get_books_by_author(db, book_author)
+    book = await book_crud.get_books_by_author(db, book_author)
     if not book:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Книги автора '{book_author}' не найдены")
     return book
+
+
+@router.delete("/{book_id}",
+               status_code=status.HTTP_200_OK,
+               summary="Удалить книгу")
+async def delete_book(book_id: int, db: AsyncSession = Depends(get_db)):
+    return await book_crud.delete_book(book_id, db)

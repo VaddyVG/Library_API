@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
         logger.error(f"Error creating tables: {e}")
         raise
     
-    yield
+    yield  # Работа приложения
     
     logger.info("Shutting down...")
     await engine.dispose()
