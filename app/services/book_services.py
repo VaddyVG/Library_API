@@ -32,7 +32,7 @@ async def create_book(db: AsyncSession, book_data: BookCreate) -> Book:
     if existing_book.scalar_one_or_none():
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Книга этого автора с таким название уже существует"
+            detail="Книга этого автора с таким названием уже существует"
         )
     db.add(book)
     await db.commit()
