@@ -23,7 +23,7 @@ async def create_reservation(reservation: ReservationCreate,
         # Проверка существования книги
         if not book:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_404_NOT_FOUND,
                 detail="Книга не найдена"
             )
 
@@ -91,7 +91,6 @@ async def return_book(reservation_id: int, db: AsyncSession) -> ReservationModel
         
         book = await db.get(Book, reservation.book_id)  # Получение ID книги
         book.is_available = True  # Меняем статус is_available на True в таблице books
-
         reservation.is_returned = True  # Меняем статус is_returned на True в таблице reservations
 
     return reservation
